@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:things/bloc/things_state.dart';
+import 'package:things/data/things.dart';
 import 'package:things/ui/things/things_presenter.dart';
 
 class ThingsList extends StatefulWidget {
@@ -17,13 +19,36 @@ class _ThingsListState extends State<ThingsList> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _presenter.thingsSateStream();
       _presenter.loadThings(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("list"));
+    return StreamBuilder<ThingsState>(
+        stream: _presenter.thingsSateStream(),
+        builder: (BuildContext context, AsyncSnapshot<ThingsState> snapshot) {
+          switch (snapshot.requireData.runtimeType) {
+            case ThingsLoadedState:
+              {
+                List<Activities> activities =
+                    (snapshot.requireData as ThingsLoadedState)
+                            .things
+                            .activities ??
+                        <Activities>[];
+                return ListView.builder(
+                    itemCount: activities.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Text(activities[index].title ?? "");
+                    });
+              }
+            case InitialState:
+              return const CircularProgressIndicator();
+            default:
+              return const CircularProgressIndicator();
+          }
+        });
   }
 
   @override
