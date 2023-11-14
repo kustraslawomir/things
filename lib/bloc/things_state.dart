@@ -1,4 +1,5 @@
 import 'package:things/data/things.dart';
+
 class ThingsState {}
 
 class InitialState extends ThingsState {}

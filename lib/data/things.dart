@@ -1,13 +1,15 @@
+import 'activity.dart';
+
 class Things {
-  List<Activities>? activities;
+  List<Activity>? activities;
 
   Things({this.activities});
 
   Things.fromJson(Map<String, dynamic> json) {
     if (json['activities'] != null) {
-      activities = <Activities>[];
+      activities = <Activity>[];
       json['activities'].forEach((v) {
-        activities!.add(Activities.fromJson(v));
+        activities!.add(Activity.fromJson(v));
       });
     }
   }
@@ -17,25 +19,6 @@ class Things {
     if (activities != null) {
       data['activities'] = activities!.map((v) => v.toJson()).toList();
     }
-    return data;
-  }
-}
-
-class Activities {
-  String? date;
-  String? title;
-
-  Activities({this.date, this.title});
-
-  Activities.fromJson(Map<String, dynamic> json) {
-    date = json['date'];
-    title = json['title'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['date'] = date;
-    data['title'] = title;
     return data;
   }
 }
