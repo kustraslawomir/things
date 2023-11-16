@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:things/ui/activities/widgets/vertical_fade_out_widget.dart';
 
 import '../../bloc/things_state.dart';
 import '../../data/activity.dart';
@@ -64,37 +65,13 @@ class _ActivityListWidgetState extends State<ActivityListWidget> {
                                 .activities ??
                             <Activity>[];
 
-                    return NotificationListener<ScrollNotification>(
-                        onNotification: (scrollNotification) {
-                          if (scrollNotification is ScrollStartNotification) {
-                            _onStartScroll(scrollNotification.metrics);
-                          } else if (scrollNotification
-                              is ScrollEndNotification) {
-                            _onEndScroll(scrollNotification.metrics);
-                          }
-                          return true;
-                        },
-                        child: ScrollablePositionedList.builder(
-                            itemCount: activities.length,
-                            itemScrollController: _controller,
-                            scrollOffsetListener: scrollOffsetListener,
-                            itemPositionsListener: _itemPositionsListener,
-                            itemBuilder: (BuildContext context, int index) {
-                              _itemKeys[index] = GlobalKey();
-                              return ActivityListItemWidget(
-                                  key: _itemKeys[index],
-                                  activity: activities[index],
-                                  isHighlighted: index == _highlightedItemIndex,
-                                  expandHighlightedItem:
-                                      _shouldExpandHighlightedItem);
+                    return VerticalFadeOutWidget(
+                        child: NotificationListener<ScrollNotification>(
+                            onNotification: (scrollNotification) {
+                              _handleOnScrollNotification(scrollNotification);
+                              return true;
                             },
-                            physics: const CustomScrollPhysics(
-                                scrollSpeedFactor:
-                                    HighlightItemSettings.scrollSpeedFactor),
-                            padding: EdgeInsets.only(
-                                top: HighlightItemSettings.topPadding(context),
-                                bottom: HighlightItemSettings.bottomPadding(
-                                    context))));
+                            child: _activityListWidget(activities, context)));
                   }
                 case InitialState:
                   return const CircularProgressIndicator();
@@ -111,7 +88,36 @@ class _ActivityListWidgetState extends State<ActivityListWidget> {
     super.dispose();
   }
 
-  void _onItemPositionChange() {
+  void _handleOnScrollNotification(ScrollNotification scrollNotification) {
+    if (scrollNotification is ScrollStartNotification) {
+      _onScrollStarted(scrollNotification.metrics);
+    } else if (scrollNotification is ScrollEndNotification) {
+      _onScrollEnded(scrollNotification.metrics);
+    }
+  }
+
+  _activityListWidget(List<Activity> activities, BuildContext context) {
+    return ScrollablePositionedList.builder(
+        itemCount: activities.length,
+        itemScrollController: _controller,
+        scrollOffsetListener: scrollOffsetListener,
+        itemPositionsListener: _itemPositionsListener,
+        itemBuilder: (BuildContext context, int index) {
+          _itemKeys[index] = GlobalKey();
+          return ActivityListItemWidget(
+              key: _itemKeys[index],
+              activity: activities[index],
+              isHighlighted: index == _highlightedItemIndex,
+              expandHighlightedItem: _shouldExpandHighlightedItem);
+        },
+        physics: const CustomScrollPhysics(
+            scrollSpeedFactor: HighlightItemSettings.scrollSpeedFactor),
+        padding: EdgeInsets.only(
+            top: HighlightItemSettings.topPadding(context),
+            bottom: HighlightItemSettings.bottomPadding(context)));
+  }
+
+  _onItemPositionChange() {
     if (_shouldExpandHighlightedItem) {
       return;
     }
@@ -129,9 +135,6 @@ class _ActivityListWidgetState extends State<ActivityListWidget> {
     if (initialOffsetRangeEnd == null) {
       return;
     }
-
-    debugPrint(
-        "first: $firstVisibleItem last: $lastVisibleItem offset end: $initialOffsetRangeEnd");
 
     if (firstVisibleItem <= initialOffsetRangeEnd) {
       var currentHighlightItemIndex = lastVisibleItem - initialOffsetRangeEnd;
@@ -153,17 +156,7 @@ class _ActivityListWidgetState extends State<ActivityListWidget> {
     _changeHighlightedIndex(currentHighlightItemIndex);
   }
 
-  void _changeHighlightedIndex(int index) {
-    if (index != _highlightedItemIndex) {
-      setState(() {
-        _highlightedItemIndex = index;
-        debugPrint('[list] highlightItemIndex: $index');
-      });
-    }
-  }
-
-  _onStartScroll(ScrollMetrics metrics) {
-    debugPrint("Scroll Start");
+  _onScrollStarted(ScrollMetrics metrics) {
     if (_shouldExpandHighlightedItem) {
       setState(() {
         _shouldExpandHighlightedItem = false;
@@ -171,11 +164,19 @@ class _ActivityListWidgetState extends State<ActivityListWidget> {
     }
   }
 
-  _onEndScroll(ScrollMetrics metrics) {
-    debugPrint("Scroll End");
+  _onScrollEnded(ScrollMetrics metrics) {
     if (!_shouldExpandHighlightedItem) {
       setState(() {
         _shouldExpandHighlightedItem = true;
+      });
+    }
+  }
+
+  _changeHighlightedIndex(int index) {
+    if (index != _highlightedItemIndex) {
+      setState(() {
+        _highlightedItemIndex = index;
+        debugPrint('highlight item index no: $index');
       });
     }
   }

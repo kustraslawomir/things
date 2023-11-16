@@ -1,50 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:things/ui/theme/text_size.dart';
 
-import 'application_colors.dart';
+import 'color_scheme.dart';
 
 class ApplicationThemeData {
   static var lightTheme = ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: ApplicationColors.seedColor),
+      colorScheme: ColorScheme.fromSeed(seedColor: AppColorScheme.seedColor),
       useMaterial3: true,
-      scaffoldBackgroundColor: Colors.white70,
+      scaffoldBackgroundColor: AppColorScheme.lightBackground,
       textTheme: _lightTextTheme);
 
   static var darkTheme = ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: ApplicationColors.seedColor),
+      colorScheme: ColorScheme.fromSeed(seedColor: AppColorScheme.seedColor),
       useMaterial3: true,
-      scaffoldBackgroundColor: Colors.black87,
+      scaffoldBackgroundColor: AppColorScheme.darkBackground,
       textTheme: _darkTextTheme);
 
   static const _lightTextTheme = TextTheme(
     bodySmall: TextStyle(
-        color: ApplicationColors.lightTextColor, fontSize: TextSize.bodySmall),
+        color: AppColorScheme.lightTextColor, fontSize: TextSize.bodySmall),
     bodyMedium: TextStyle(
-        color: ApplicationColors.lightTextColor, fontSize: TextSize.bodyMedium),
+        color: AppColorScheme.lightTextColor, fontSize: TextSize.bodyMedium),
     bodyLarge: TextStyle(
-        color: ApplicationColors.lightTextColor, fontSize: TextSize.bodyLarge),
+        color: AppColorScheme.lightTextColor, fontSize: TextSize.bodyLarge),
     titleSmall: TextStyle(
-        color: ApplicationColors.textTitleColor, fontSize: TextSize.titleSmall),
+        color: AppColorScheme.lightTextTitleColor,
+        fontSize: TextSize.titleSmall),
     titleMedium: TextStyle(
-        color: ApplicationColors.textHighlightTitleColor,
+        color: AppColorScheme.highlightTextColor,
         fontSize: TextSize.titleMedium),
     titleLarge: TextStyle(
-        color: ApplicationColors.textTitleColor, fontSize: TextSize.titleLarge),
+        color: AppColorScheme.lightTextTitleColor,
+        fontSize: TextSize.titleLarge),
   );
 
   static const _darkTextTheme = TextTheme(
     bodySmall: TextStyle(
-        color: ApplicationColors.darkTextColor, fontSize: TextSize.bodySmall),
+        color: AppColorScheme.darkTextColor, fontSize: TextSize.bodySmall),
     bodyMedium: TextStyle(
-        color: ApplicationColors.darkTextColor, fontSize: TextSize.bodyMedium),
+        color: AppColorScheme.darkTextColor, fontSize: TextSize.bodyMedium),
     bodyLarge: TextStyle(
-        color: ApplicationColors.darkTextColor, fontSize: TextSize.bodyLarge),
+        color: AppColorScheme.darkTextColor, fontSize: TextSize.bodyLarge),
     titleSmall: TextStyle(
-        color: ApplicationColors.textTitleColor, fontSize: TextSize.titleSmall),
+        color: AppColorScheme.darkTextTitleColor,
+        fontSize: TextSize.titleSmall),
     titleMedium: TextStyle(
-        color: ApplicationColors.textHighlightTitleColor,
+        color: AppColorScheme.highlightTextColor,
         fontSize: TextSize.titleMedium),
     titleLarge: TextStyle(
-        color: ApplicationColors.textTitleColor, fontSize: TextSize.titleLarge),
+        color: AppColorScheme.darkTextTitleColor,
+        fontSize: TextSize.titleLarge),
   );
 }

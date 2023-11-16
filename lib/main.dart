@@ -15,11 +15,11 @@ class ThingsApplication extends StatefulWidget {
 }
 
 class ThingsApplicationState extends State<ThingsApplication> {
-
   @override
   Widget build(BuildContext context) {
     return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
       return MaterialApp(
+          debugShowCheckedModeBanner: false,
           home: const Scaffold(body: ActivityListWidget()),
           theme: ApplicationThemeData.lightTheme,
           darkTheme: ApplicationThemeData.darkTheme);
