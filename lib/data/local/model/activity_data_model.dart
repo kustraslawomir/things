@@ -1,11 +1,11 @@
 import 'activity.dart';
 
-class Things {
+class ActivityData {
   List<Activity>? activities;
 
-  Things({this.activities});
+  ActivityData({this.activities});
 
-  Things.fromJson(Map<String, dynamic> json) {
+  ActivityData.fromJson(Map<String, dynamic> json) {
     if (json['activities'] != null) {
       activities = <Activity>[];
       json['activities'].forEach((v) {

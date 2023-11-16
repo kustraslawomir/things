@@ -12,11 +12,11 @@ import 'package:flutter/widgets.dart';
 class $AssetsJsonGen {
   const $AssetsJsonGen();
 
-  /// File path: assets/json/things.json
-  String get things => 'assets/json/things.json';
+  /// File path: assets/json/activities.json
+  String get activities => 'assets/json/activities.json';
 
   /// List of all assets
-  List<String> get values => [things];
+  List<String> get values => [activities];
 }
 
 class Assets {

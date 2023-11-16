@@ -1,6 +1,6 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:things/ui/activities/activity_list.dart';
+import 'package:things/ui/activities/activity_list_page.dart';
 import 'package:things/ui/theme/application_theme_data.dart';
 
 void main() => runApp(const ThingsApplication());
@@ -20,7 +20,7 @@ class ThingsApplicationState extends State<ThingsApplication> {
     return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
       return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: const Scaffold(body: ActivityListWidget()),
+          home: const Scaffold(body: ActivityListPage()),
           theme: ApplicationThemeData.lightTheme,
           darkTheme: ApplicationThemeData.darkTheme);
     });

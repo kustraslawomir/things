@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-import '../../../data/activity.dart';
+import '../../../data/local/model/activity.dart';
 import '../../theme/dimensions.dart';
 import 'highlight_item_settings.dart';
 

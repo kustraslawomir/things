@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:things/ui/activities/widgets/vertical_fade_out_widget.dart';
 
-import '../../bloc/things_state.dart';
-import '../../data/activity.dart';
+import '../../bloc/activity/activity_data_state.dart';
+import '../../data/local/model/activity.dart';
 import '../theme/dimensions.dart';
 import '../utils/scroll/custom_scroll_physics.dart';
-import 'activity_presenter.dart';
+import 'activity_data_presenter.dart';
+import 'activity_data_presenter_impl.dart';
 import 'item/activity_list_item_widget.dart';
 import 'item/highlight_item_settings.dart';
 
@@ -16,17 +17,17 @@ class OffsetRange {
   OffsetRange(this.end);
 }
 
-class ActivityListWidget extends StatefulWidget {
-  const ActivityListWidget({super.key});
+class ActivityListPage extends StatefulWidget {
+  const ActivityListPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _ActivityListWidgetState();
+    return _ActivityListPageState();
   }
 }
 
-class _ActivityListWidgetState extends State<ActivityListWidget> {
-  final ThingsPresenter _presenter = ThingsPresenterImpl();
+class _ActivityListPageState extends State<ActivityListPage> {
+  final ActivityDataPresenter _presenter = ActivityDataPresenterImpl();
   final ItemScrollController _controller = ItemScrollController();
   final ItemPositionsListener _itemPositionsListener =
       ItemPositionsListener.create();
@@ -52,16 +53,16 @@ class _ActivityListWidgetState extends State<ActivityListWidget> {
     return Padding(
         padding:
             const EdgeInsets.symmetric(horizontal: Dimensions.screenPadding),
-        child: StreamBuilder<ThingsState>(
+        child: StreamBuilder<ActivityDataState>(
             stream: _presenter.thingsSateStream(),
             builder:
-                (BuildContext context, AsyncSnapshot<ThingsState> snapshot) {
+                (BuildContext context, AsyncSnapshot<ActivityDataState> snapshot) {
               switch (snapshot.requireData.runtimeType) {
-                case ThingsLoadedState:
+                case ActivitiesLoadedSuccessfully:
                   {
                     List<Activity> activities =
-                        (snapshot.requireData as ThingsLoadedState)
-                                .things
+                        (snapshot.requireData as ActivitiesLoadedSuccessfully)
+                                .data
                                 .activities ??
                             <Activity>[];
 
@@ -73,7 +74,7 @@ class _ActivityListWidgetState extends State<ActivityListWidget> {
                             },
                             child: _activityListWidget(activities, context)));
                   }
-                case InitialState:
+                case ActivityDataInitialState:
                   return const CircularProgressIndicator();
                 default:
                   return const CircularProgressIndicator();

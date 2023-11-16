@@ -1,4 +1,4 @@
-import 'package:things/data/tag.dart';
+import 'package:things/data/local/model/tag.dart';
 
 class Activity {
   int? id;
