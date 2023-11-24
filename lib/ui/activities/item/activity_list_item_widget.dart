@@ -65,6 +65,10 @@ class _ActivityListItemState extends State<ActivityListItemWidget> {
       widget.isHighlighted && widget.expandHighlightedItem;
 
   _startFadeIn() {
+    if(!mounted){
+      return;
+    }
+
     setState(() {
       _descriptionItemOpacity = 1.0;
     });

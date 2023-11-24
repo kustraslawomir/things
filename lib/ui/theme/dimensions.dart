@@ -1,5 +1,5 @@
 class Dimensions {
 
-  static const double screenPadding = 16.0;
-  static const double listItemVerticalPadding = 12.0;
+  static const double screenPadding = 24.0;
+  static const double listItemVerticalPadding = 16.0;
 }

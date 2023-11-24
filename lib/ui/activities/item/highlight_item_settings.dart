@@ -11,5 +11,5 @@ class HighlightItemSettings {
     return MediaQuery.of(context).size.height / 1.4;
   }
 
-  static const fadeInDescriptionDuration = Duration(milliseconds: 700);
+  static const fadeInDescriptionDuration = Duration(milliseconds: 900);
 }

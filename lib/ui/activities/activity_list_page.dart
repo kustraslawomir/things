@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:things/ui/activities/widgets/loading_widget.dart';
 import 'package:things/ui/activities/widgets/vertical_fade_out_widget.dart';
 
 import '../../bloc/activity/activity_data_state.dart';
@@ -55,8 +56,12 @@ class _ActivityListPageState extends State<ActivityListPage> {
             const EdgeInsets.symmetric(horizontal: Dimensions.screenPadding),
         child: StreamBuilder<ActivityDataState>(
             stream: _presenter.thingsSateStream(),
-            builder:
-                (BuildContext context, AsyncSnapshot<ActivityDataState> snapshot) {
+            builder: (BuildContext context,
+                AsyncSnapshot<ActivityDataState> snapshot) {
+              if (snapshot.data == null) {
+                return const LoadingWidget();
+              }
+
               switch (snapshot.requireData.runtimeType) {
                 case ActivitiesLoadedSuccessfully:
                   {
@@ -75,9 +80,9 @@ class _ActivityListPageState extends State<ActivityListPage> {
                             child: _activityListWidget(activities, context)));
                   }
                 case ActivityDataInitialState:
-                  return const CircularProgressIndicator();
+                  return const LoadingWidget();
                 default:
-                  return const CircularProgressIndicator();
+                  return const LoadingWidget();
               }
             }));
   }
