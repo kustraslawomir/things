@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:things/bloc/activity/activity_data_state.dart';
+
+import 'activity_data_state.dart';
 
 class ActivityDataCubit extends Cubit<ActivityDataState> {
 

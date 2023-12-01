@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../bloc/activity/activity_data_cubit.dart';
-import '../../bloc/activity/activity_data_state.dart';
 import '../../data/local/activity_data_local_repository.dart';
 import '../../data/local/activity_data_local_repository_impl.dart';
 import 'activity_data_presenter.dart';
+import 'bloc/activity_data_cubit.dart';
+import 'bloc/activity_data_state.dart';
 
 
 class ActivityDataPresenterImpl extends ActivityDataPresenter {
@@ -24,7 +24,7 @@ class ActivityDataPresenterImpl extends ActivityDataPresenter {
   }
 
   @override
-  void dispose() {
+  void close() {
     _cubit.close();
   }
 }

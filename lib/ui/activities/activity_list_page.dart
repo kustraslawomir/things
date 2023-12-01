@@ -3,12 +3,12 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:things/ui/activities/widgets/loading_widget.dart';
 import 'package:things/ui/activities/widgets/vertical_fade_out_widget.dart';
 
-import '../../bloc/activity/activity_data_state.dart';
 import '../../data/local/model/activity.dart';
 import '../theme/dimensions.dart';
 import '../utils/scroll/custom_scroll_physics.dart';
 import 'activity_data_presenter.dart';
 import 'activity_data_presenter_impl.dart';
+import 'bloc/activity_data_state.dart';
 import 'item/activity_list_item_widget.dart';
 import 'item/highlight_item_settings.dart';
 
@@ -56,8 +56,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
             const EdgeInsets.symmetric(horizontal: Dimensions.screenPadding),
         child: StreamBuilder<ActivityDataState>(
             stream: _presenter.thingsSateStream(),
-            builder: (BuildContext context,
-                AsyncSnapshot<ActivityDataState> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<ActivityDataState> snapshot) {
               if (snapshot.data == null) {
                 return const LoadingWidget();
               }
@@ -90,7 +89,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
   @override
   void dispose() {
     _itemPositionsListener.itemPositions.removeListener(_onItemPositionChange);
-    _presenter.dispose();
+    _presenter.close();
     super.dispose();
   }
 

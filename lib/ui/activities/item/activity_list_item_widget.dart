@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../../data/local/model/activity.dart';
 import '../../theme/dimensions.dart';
+import 'activity_item_presenter_impl.dart';
+import 'activity_item_presenter.dart';
+import 'bloc/activity_item_state.dart';
 import 'highlight_item_settings.dart';
 
 class ActivityListItemWidget extends StatefulWidget {
@@ -23,13 +26,14 @@ class ActivityListItemWidget extends StatefulWidget {
 }
 
 class _ActivityListItemState extends State<ActivityListItemWidget> {
-  double _descriptionItemOpacity = 0.0;
+  final ActivityItemPresenter _presenter = ActivityItemPresenterImpl();
 
   @override
   void initState() {
     super.initState();
     if (_isItemSelected()) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _startFadeIn());
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _presenter.expandItemDescription());
     }
   }
 
@@ -44,6 +48,11 @@ class _ActivityListItemState extends State<ActivityListItemWidget> {
         ]));
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   AutoSizeText _buildItemTitle(BuildContext context) {
     return AutoSizeText(widget.activity.title ?? "",
         maxLines: 1,
@@ -52,25 +61,32 @@ class _ActivityListItemState extends State<ActivityListItemWidget> {
             : Theme.of(context).textTheme.titleSmall);
   }
 
-  AnimatedOpacity _buildItemDescription(BuildContext context) {
-    return AnimatedOpacity(
-        opacity: _descriptionItemOpacity,
-        duration: HighlightItemSettings.fadeInDescriptionDuration,
-        child: Text(widget.activity.getDescriptionWithHashTags(),
-            style: Theme.of(context).textTheme.bodySmall,
-            textAlign: TextAlign.end));
+  Widget _buildItemDescription(BuildContext context) {
+    return StreamBuilder(
+        stream: _presenter.activityItemStateStream(),
+        builder:
+            (BuildContext context, AsyncSnapshot<ActivityItemState> snapshot) {
+          var descriptionOpacity = 0.0;
+
+          if (snapshot.hasData) {
+            switch (snapshot.requireData.runtimeType) {
+              case ActivityItemDescriptionCollapsed:
+                descriptionOpacity = 0.0;
+                break;
+              case ActivityItemDescriptionExpanded:
+                descriptionOpacity = 1.0;
+                break;
+            }
+          }
+          return AnimatedOpacity(
+              opacity: descriptionOpacity,
+              duration: HighlightItemSettings.fadeInDescriptionDuration,
+              child: Text(widget.activity.getDescriptionWithHashTags(),
+                  style: Theme.of(context).textTheme.bodySmall,
+                  textAlign: TextAlign.end));
+        });
   }
 
   bool _isItemSelected() =>
       widget.isHighlighted && widget.expandHighlightedItem;
-
-  _startFadeIn() {
-    if(!mounted){
-      return;
-    }
-
-    setState(() {
-      _descriptionItemOpacity = 1.0;
-    });
-  }
 }
